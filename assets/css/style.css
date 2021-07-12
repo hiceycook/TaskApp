@@ -4,14 +4,14 @@
 
 :root {
   --primary: #691dc0;
-  --secondary: white;
+  --secondary: #d5e5fa;
   --tertiary: #569fff;
   --grey: #333;
   font-size: 62.5%;
 }
 
 body {
-  background: #d5e5fa;
+  background: white;
   color: var(--grey);
   margin: 0;
   padding: 0;
@@ -97,7 +97,7 @@ footer {
   list-style: none;
   padding: 15px;
   height: calc(100% - 50px);
-  background: var(--tertiary);
+  background: var(--secondary);
   border-radius: 12px;
   border: 2px solid var(--grey);
 }
@@ -106,7 +106,7 @@ footer {
   color: var(--grey);
   padding: 15px 15px;
   border: 2px solid var(--grey);
-  background: white;
+  background: var(--tertiary);
   border-radius: 12px;
   margin-bottom: 20px;
 }
@@ -118,7 +118,7 @@ footer {
 }
 
 .task-type {
-  color: grey;
+  color: lightblue;
   font-size: 1.55rem;
 }
 .task-actions {
