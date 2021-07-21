@@ -107,7 +107,7 @@ var taskButtonHandler = function (event) {
 
 var deleteTask = function (taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
-    console.log(taskSelected);
+    taskSelected.remove();
 };
 
 // EVENT LISTENER FOR TASK BUTTONS //
