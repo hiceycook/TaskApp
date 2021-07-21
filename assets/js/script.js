@@ -16,13 +16,48 @@ var taskFormHandler = function (event) {
     }
     // RESET THE FORM AFTER SUBMISSION//
     formEl.reset();
+    //CHECK IF INPUT IS EDIT //
+    var isEdit = formEl.hasAttribute("data-task-id");
+
+
+
+
+
+
     // PACKAGE DATA AS AN OBJECT //
-    var taskDataObj = {
-        name: taskNameInput,
-        type: taskTypeInput
-    };
-    // SEND THE DATA AS AN ARGUMENT AND CALL createTaskEl FUNCTION //
-    createTaskEl(taskDataObj);
+    // var taskDataObj = {
+    //     name: taskNameInput,
+    //     type: taskTypeInput
+    // };
+
+    // IF HAS TASK ID, THEN RU NEDIT FUNCTION, IF NOT, NEW LIST ITEM FUNCTION CALLED //
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+    // no data attribute, so create object as normal and pass to createTaskEl function
+    else {
+        var taskDataObj = {
+            name: taskNameInput,
+            type: taskTypeInput
+        };
+
+        createTaskEl(taskDataObj);
+    }
+};
+
+var completeEditTask = function (taskName, taskType, taskId) {
+    // FIND THE MATCHING LIST ITEM BY ID //
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    // SET NEW VALUES //
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+    // REMOVE ID FROM FORM AND CHANGE BUTTON BACK TO SUBMIT //
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
 };
 
 // NEW FUNCTION//
@@ -96,19 +131,42 @@ var createTaskActions = function (taskId) {
 // SUBMIT BUTTON EVENT //
 formEl.addEventListener("submit", taskFormHandler);
 
-// TASK BUTTON FUNCTION //
+// TASK BUTTON DELETE OR EDIT FUNCTION //
 var taskButtonHandler = function (event) {
-    if (event.target.matches(".delete-btn")) {
+    // GET TARGET ELEMENT FROM EVENT
+    var targetEl = event.target;
+    // IF DELETE BUTTON CLICKED //
+    if (targetEl.matches(".delete-btn")) {
         //    GET THE ELEMENTS TASK ID //
-        var taskId = event.target.getAttribute("data-task-id");
+        var taskId = targetEl.getAttribute("data-task-id");
         deleteTask(taskId);
     }
-}
+    // IF EDIT BUTTON CLICKED //
+    else if (targetEl.matches(".edit-btn")) {
+        var taskId = targetEl.getAttribute("data-task-id")
+        editTask(taskId);
+    }
+};
 
 var deleteTask = function (taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
 };
+
+var editTask = function (taskId) {
+    //  GET THE TASK LIST ITEM BY TASK ID//
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    //GET CONTENT FROM THE TASK LIST ITEM //
+    var taskName = taskSelected.querySelector("h3.task-name").textContent;
+    var taskType = taskSelected.querySelector("span.task-type").textContent;
+    document.querySelector("input[name='task-name']").value = taskName;
+    document.querySelector("select[name='task-type']").value = taskType;
+    // CHANGE SUBMIT BUTTON TO  SAVE BUTTON //
+    document.querySelector("#save-task").textContent = "Save Task";
+    formEl.setAttribute("data-task-id", taskId);
+
+}
 
 // EVENT LISTENER FOR TASK BUTTONS //
 pageContentEl.addEventListener("click", taskButtonHandler);
