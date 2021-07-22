@@ -57,6 +57,7 @@ var completeEditTask = function (taskName, taskType, taskId) {
     // REMOVE ID FROM FORM AND CHANGE BUTTON BACK TO SUBMIT //
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+    saveTasks();
 };
 
 // NEW FUNCTION//
@@ -90,6 +91,7 @@ var createTaskEl = function (taskDataObj) {
     taskDataObj.id = taskIdCounter;
 
     tasks.push(taskDataObj);
+    saveTasks();
 
     taskIdCounter++;
 };
@@ -160,7 +162,7 @@ var deleteTask = function (taskId) {
 
     // LOOP THROUGH CURRENT TASKS
     for (var i = 0; i < tasks.length; i++) {
-        // IF tasks[i] DOESNT MATCH THE VALUE OF taskId, THEN KEEP AND PUSH INTO UPDATED ARRAY //
+        // IF tasks[i] DOESNT MATCH THE VALUE OF taskId, THEN KEEP AND PUSH INTO UPDATED ARRAY //g
         if (tasks[i].id !== parseInt(taskId)) {
             updatedTaskArr.push(tasks[i]);
         }
@@ -168,6 +170,7 @@ var deleteTask = function (taskId) {
 
     // REASSIGN THE "TASKS" ARRAY TO MATCH THE UPDATED ARRAY //
     tasks = updatedTaskArr;
+    saveTasks();
 };
 
 var editTask = function (taskId) {
@@ -210,8 +213,12 @@ var taskStatusChangeHandler = function (event) {
             tasks[i].status = statusValue;
         }
     }
-    console.log(tasks);
+    saveTasks();
 };
+
+var saveTasks = function () {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 // EVENT LISTENER FOR TASK BUTTONS //
 pageContentEl.addEventListener("click", taskButtonHandler);
